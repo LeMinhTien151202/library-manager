@@ -1,0 +1,39 @@
+<div class="container mt-4">
+  <h2>Danh sách sách</h2>
+  <a class="btn btn-primary mb-3" [routerLink]="['/add-book']">Thêm sách mới</a>
+
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Ảnh bìa</th>
+        <th>Tiêu đề</th>
+        <th>Tác giả</th>
+        <th>Năm xuất bản</th>
+        <th>Thể loại</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td>{{book.id}}</td>
+        <td>
+          <img *ngIf="book.thumbnail" [src]="'http://localhost:8088' + book.thumbnail" alt="Thumbnail" class="thumbnail">
+          <span *ngIf="!book.thumbnail">Không có ảnh</span>
+        </td>
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.publicationYear}}</td>
+        <td>{{book.genre}}</td>
+        <td>
+          <a class="btn btn-sm btn-primary me-2" [routerLink]="['/edit-book', book.id]">
+            <i class="bi bi-pencil"></i> Sửa
+          </a>
+          <button class="btn btn-sm btn-danger" (click)="deleteBook(book.id)">
+            <i class="bi bi-trash"></i> Xóa
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

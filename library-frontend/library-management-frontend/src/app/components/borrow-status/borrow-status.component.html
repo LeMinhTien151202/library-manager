@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2>Trạng thái mượn sách</h2>
+
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Tên sách</th>
+        <th>Người mượn</th>
+        <th>Ngày mượn</th>
+        <th>Ngày trả</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let status of borrowStatuses">
+        <td>{{status.borrowId}}</td>
+        <td>{{status.book.title}}</td>
+        <td>{{status.borrower.name}}</td>
+        <td>{{status.borrowDate}}</td>
+        <td>{{status.returnDate || 'Chưa trả'}}</td>
+        <td>{{status.status === 'borrowed' ? 'Đang mượn' : 'Đã trả'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

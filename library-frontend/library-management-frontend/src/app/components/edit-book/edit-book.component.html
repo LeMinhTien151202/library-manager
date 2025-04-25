@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <h2>Sửa sách</h2>
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="title" class="form-label">Tiêu đề</label>
+      <input type="text" class="form-control" id="title" formControlName="title" required>
+      <div *ngIf="bookForm.get('title')?.hasError('required') && bookForm.get('title')?.touched" class="text-danger">
+        Tiêu đề là bắt buộc
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="author" class="form-label">Tác giả</label>
+      <input type="text" class="form-control" id="author" formControlName="author" required>
+      <div *ngIf="bookForm.get('author')?.hasError('required') && bookForm.get('author')?.touched" class="text-danger">
+        Tác giả là bắt buộc
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="publicationYear" class="form-label">Năm xuất bản</label>
+      <input type="number" class="form-control" id="publicationYear" formControlName="publicationYear">
+    </div>
+
+    <div class="mb-3">
+      <label for="genre" class="form-label">Thể loại</label>
+      <input type="text" class="form-control" id="genre" formControlName="genre">
+    </div>
+
+    <div class="mb-3">
+      <label for="thumbnail" class="form-label">Ảnh bìa</label>
+      <input type="file" class="form-control" id="thumbnail" (change)="onFileSelected($event)" accept="image/*">
+      <div *ngIf="currentThumbnail" class="mt-2">
+        <img [src]="currentThumbnail" alt="Thumbnail Preview" class="thumbnail-preview">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="!bookForm.valid">Lưu</button>
+      <a class="btn btn-secondary" [routerLink]="['/books']">Hủy</a>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,6 @@
+.thumbnail {
+  width: 100px;     /* hoặc bất kỳ kích thước nào phù hợp */
+  height: auto;     /* giữ tỉ lệ */
+  object-fit: cover; /* nếu muốn cắt cho đẹp */
+  border-radius: 5px; /* bo góc nhẹ nếu muốn */
+}
