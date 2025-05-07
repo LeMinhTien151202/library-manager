@@ -34,8 +34,7 @@ public class BookService implements IBookService{
     @Override
     public Book getBookById(Long id) throws Exception {
         return bookRepository.findById(id).
-                orElseThrow(()-> new DataNotFoundException(
-                        "Cannot find book with id ="+id));
+                orElseThrow(() -> new RuntimeException("book not found with id: " + id));
     }
 
     @Override

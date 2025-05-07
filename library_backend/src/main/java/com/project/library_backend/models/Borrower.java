@@ -1,6 +1,8 @@
 package com.project.library_backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,9 +23,11 @@ public class Borrower {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String email;
 
+    @Column(name = "phone", nullable = false)
+    @Size(min = 10,max = 12,message = "Phone must be between 10 and 12 characters")
     private String phone;
 
     @Column(name = "created_at")
