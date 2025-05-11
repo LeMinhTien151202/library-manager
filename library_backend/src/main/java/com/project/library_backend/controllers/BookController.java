@@ -1,9 +1,11 @@
 package com.project.library_backend.controllers;
 
 import com.project.library_backend.models.Book;
+import com.project.library_backend.responses.ResponseObject;
 import com.project.library_backend.services.IBookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -23,24 +25,24 @@ public class BookController {
 
     @GetMapping("")
     public ResponseEntity<?> getBookAll() {
-        try {
-            List<Book> books = bookService.getAllBooks();
-            return ResponseEntity.ok(books);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        List<Book> books = bookService.getAllBooks();
+        return ResponseEntity.ok(ResponseObject.builder()
+                .message("Get list of books successfully")
+                .status(HttpStatus.OK)
+                .data(books)
+                .build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookById(
+    public ResponseEntity<ResponseObject> getBookById(
             @PathVariable("id") Long bookId
-    ) {
-        try {
-            Book book = bookService.getBookById(bookId);
-            return ResponseEntity.ok(book);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    ) throws Exception {
+        Book book = bookService.getBookById(bookId);
+        return ResponseEntity.ok(ResponseObject.builder()
+                .data(book)
+                .message("Get book information successfully")
+                .status(HttpStatus.OK)
+                .build());
     }
 
     //    @PostMapping("")
@@ -60,7 +62,7 @@ public class BookController {
 //
 //    }
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Book> createBook(
+    public ResponseEntity<ResponseObject> createBook(
             @RequestParam("title") String title,
             @RequestParam("author") String author,
             @RequestParam("publicationYear") Long publicationYear,
@@ -76,11 +78,16 @@ public class BookController {
 
         // Gọi service để lưu book và xử lý thumbnail
         Book savedBook = bookService.saveBookWithThumbnail(book, thumbnailFile);
-        return ResponseEntity.ok(savedBook);
+        return ResponseEntity.ok(
+                ResponseObject.builder()
+                        .message("Create new book successfully")
+                        .status(HttpStatus.CREATED)
+                        .data(savedBook)
+                        .build());
     }
 
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
-    public ResponseEntity<Book> updateBook(
+    public ResponseEntity<ResponseObject> updateBook(
             @PathVariable("id") Long bookId,
             @RequestParam("title") String title,
             @RequestParam("author") String author,
@@ -99,13 +106,22 @@ public class BookController {
 
         // Gọi service để lưu book và xử lý thumbnail
         Book updatedBook = bookService.saveBookWithThumbnail(book, thumbnailFile);
-        return ResponseEntity.ok(updatedBook);
+        return ResponseEntity.ok(
+                ResponseObject.builder()
+                        .message("Update book successfully")
+                        .status(HttpStatus.CREATED)
+                        .data(updatedBook)
+                        .build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
-        return ResponseEntity.ok("Delete subject with id: "+id+" successfully");
+        return ResponseEntity.ok(
+                ResponseObject.builder()
+                        .status(HttpStatus.OK)
+                        .message("Delete book with id: "+id+" successfully")
+                        .build());
     }
 
 }

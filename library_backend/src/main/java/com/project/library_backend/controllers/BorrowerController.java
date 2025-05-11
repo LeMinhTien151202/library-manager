@@ -75,18 +75,7 @@ public class BorrowerController {
             @PathVariable Long id,
             @Valid @RequestBody Borrower borrower,
             BindingResult result
-    ) throws Exception, DataNotFoundException {
-        if(result.hasErrors()) {
-            List<String> errorMessages = result.getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .toList();
-            return ResponseEntity.badRequest().body(
-                    ResponseObject.builder()
-                            .message(String.join(";", errorMessages))
-                            .status(HttpStatus.BAD_REQUEST)
-                            .build());
-        }
+    ) throws Exception{
         Borrower borrower1 = borrowerService.updateBorrower(id,borrower);
         return ResponseEntity.ok(new ResponseObject("Update borrower successfully", HttpStatus.OK, borrower1));
     }

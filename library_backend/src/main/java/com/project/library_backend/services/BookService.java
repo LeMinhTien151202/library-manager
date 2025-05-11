@@ -34,11 +34,12 @@ public class BookService implements IBookService{
     @Override
     public Book getBookById(Long id) throws Exception {
         return bookRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("book not found with id: " + id));
+                orElseThrow(() -> new DataNotFoundException("Cannot find book with id: "+id));
     }
 
     @Override
     public Book saveBookWithThumbnail(Book book, MultipartFile thumbnailFile) throws IOException {
+
         // Xử lý upload file ảnh nếu có
         if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
             // Tạo thư mục uploads nếu chưa tồn tại

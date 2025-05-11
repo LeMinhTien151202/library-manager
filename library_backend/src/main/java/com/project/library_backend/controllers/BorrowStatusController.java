@@ -3,6 +3,7 @@ package com.project.library_backend.controllers;
 import com.project.library_backend.dtos.BorrowStatusDTO;
 import com.project.library_backend.models.BorrowStatus;
 import com.project.library_backend.models.Borrower;
+import com.project.library_backend.responses.ResponseObject;
 import com.project.library_backend.services.IBorrowStatusService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,62 +23,68 @@ public class BorrowStatusController {
     private final IBorrowStatusService borrowStatusService;
 
     @GetMapping("")
-    public ResponseEntity<?> getBorrowStatusAll() {
-        try {
-            List<BorrowStatus> borrowStatuses = borrowStatusService.getAllBorrowStatus();
-            return ResponseEntity.ok(borrowStatuses);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ResponseObject> getBorrowStatusAll() {
+        List<BorrowStatus> borrowStatuses = borrowStatusService.getAllBorrowStatus();
+        return ResponseEntity.ok(ResponseObject.builder()
+                .message("Get list of borrowStatus successfully")
+                .status(HttpStatus.OK)
+                .data(borrowStatuses)
+                .build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBorrowStatusById(
+    public ResponseEntity<ResponseObject> getBorrowStatusById(
             @PathVariable("id") Long borrowStatusId
-    ) {
-        try {
-            BorrowStatus existingBorrowStatus = borrowStatusService.getBorrowStatusById(borrowStatusId);
-            return ResponseEntity.ok(existingBorrowStatus);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    ) throws Exception {
+
+        BorrowStatus existingBorrowStatus = borrowStatusService.getBorrowStatusById(borrowStatusId);
+        return ResponseEntity.ok(ResponseObject.builder()
+                .data(existingBorrowStatus)
+                .message("Get borrowStatus information successfully")
+                .status(HttpStatus.OK)
+                .build());
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createBorrowStatus(
+    public ResponseEntity<ResponseObject> createBorrowStatus(
             @Valid @RequestBody BorrowStatusDTO borrowStatusDTO,
             BindingResult result
-    ) {
-        try {
-            if(result.hasErrors()) {
-                List<String> errorMessages = result.getFieldErrors()
-                        .stream()
-                        .map(FieldError::getDefaultMessage)
-                        .toList();
-                return ResponseEntity.badRequest().body(errorMessages);
-            }
-            BorrowStatus newBorrowStatus = borrowStatusService.createBorrowStatus(borrowStatusDTO);
-            return ResponseEntity.ok(newBorrowStatus);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+    ) throws Exception {
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .message(String.join(";", errorMessages))
+                            .status(HttpStatus.BAD_REQUEST)
+                            .build());
         }
+        BorrowStatus newBorrowStatus = borrowStatusService.createBorrowStatus(borrowStatusDTO);
+        return ResponseEntity.ok(ResponseObject.builder()
+                .message("add borrowStatus successfully")
+                .status(HttpStatus.OK)
+                .data(newBorrowStatus).build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBorrowStatus(
             @PathVariable Long id,
             @Valid @RequestBody BorrowStatusDTO borrowStatusDTO
-    ) {
-        try {
-            BorrowStatus borrowStatus = borrowStatusService.updateBorrowStatus(id, borrowStatusDTO);
-            return ResponseEntity.ok(borrowStatus);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    ) throws Exception {
+
+        BorrowStatus borrowStatus = borrowStatusService.updateBorrowStatus(id, borrowStatusDTO);
+        return ResponseEntity.ok(
+                new ResponseObject("Update borrowStatus successfully", HttpStatus.OK, borrowStatus));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBorrowStatus(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteBorrowStatus(@PathVariable Long id) {
         borrowStatusService.deleteBorrowStatus(id);
-        return ResponseEntity.ok("Delete subject with id: "+id+" successfully");
+        return ResponseEntity.ok(
+                ResponseObject.builder()
+                        .status(HttpStatus.OK)
+                        .message("Delete subject with id: "+id+" successfully")
+                        .build());
     }
 }

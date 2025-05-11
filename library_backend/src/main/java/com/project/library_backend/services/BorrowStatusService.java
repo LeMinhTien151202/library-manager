@@ -39,12 +39,12 @@ public class BorrowStatusService implements IBorrowStatusService{
                 .findById(borrowStatusDTO.getBookId())
                 .orElseThrow(() ->
                         new DataNotFoundException(
-                                "Cannot find user with id: "+borrowStatusDTO.getBookId()));
+                                "Cannot find book with id: "+borrowStatusDTO.getBookId()));
         Borrower existingBorrower = borrowerRepository
                 .findById(borrowStatusDTO.getBorrowerId())
                 .orElseThrow(() ->
                         new DataNotFoundException(
-                                "Cannot find category with id: "+borrowStatusDTO.getBorrowerId()));
+                                "Cannot find borrower with id: "+borrowStatusDTO.getBorrowerId()));
         BorrowStatus newBorrowStatus = BorrowStatus.builder()
                 .status(borrowStatusDTO.getStatus())
                 .borrower(existingBorrower)
@@ -65,12 +65,12 @@ public class BorrowStatusService implements IBorrowStatusService{
                 .findById(borrowStatusDTO.getBookId())
                 .orElseThrow(() ->
                         new DataNotFoundException(
-                                "Cannot find user with id: "+borrowStatusDTO.getBookId()));
+                                "Cannot find book with id: "+borrowStatusDTO.getBookId()));
         Borrower existingBorrower = borrowerRepository
                 .findById(borrowStatusDTO.getBorrowerId())
                 .orElseThrow(() ->
                         new DataNotFoundException(
-                                "Cannot find category with id: "+borrowStatusDTO.getBorrowerId()));
+                                "Cannot find borrower with id: "+borrowStatusDTO.getBorrowerId()));
         borrowStatus.setStatus(borrowStatusDTO.getStatus());
         borrowStatus.setBorrowDate(borrowStatusDTO.getBorrowDate());
         borrowStatus.setReturnDate(borrowStatusDTO.getReturnDate());
