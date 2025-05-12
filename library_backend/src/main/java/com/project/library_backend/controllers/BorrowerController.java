@@ -76,11 +76,22 @@ public class BorrowerController {
             @Valid @RequestBody Borrower borrower,
             BindingResult result
     ) throws Exception{
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .message(String.join(";", errorMessages))
+                            .status(HttpStatus.BAD_REQUEST)
+                            .build());
+        }
         Borrower borrower1 = borrowerService.updateBorrower(id,borrower);
         return ResponseEntity.ok(new ResponseObject("Update borrower successfully", HttpStatus.OK, borrower1));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> deleteBorrower(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteBorrower(@PathVariable Long id) throws DataNotFoundException {
         borrowerService.deleteBorrower(id);
         return ResponseEntity.ok(
                 ResponseObject.builder()

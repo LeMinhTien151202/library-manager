@@ -56,8 +56,10 @@ public class BorrowerService implements IBorrowerService{
     }
 
     @Override
-    public void deleteBorrower(Long id) {
-
+    public void deleteBorrower(Long id) throws DataNotFoundException {
+        if (!borrowerRepository.existsById(id)) {
+            throw new DataNotFoundException("Cannot find borrower with id: " + id);
+        }
         borrowerRepository.deleteById(id);
     }
 }

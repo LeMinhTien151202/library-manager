@@ -1,5 +1,6 @@
 package com.project.library_backend.services;
 
+import com.project.library_backend.exceptions.DataNotFoundException;
 import com.project.library_backend.models.Book;
 import com.project.library_backend.models.Borrower;
 
@@ -10,5 +11,5 @@ public interface IBorrowerService {
     Borrower getBorrowerById(Long id) throws Exception;
     Borrower createBorrower(Borrower borrower);
     Borrower updateBorrower(Long id, Borrower borrower) throws Exception;
-    void deleteBorrower(Long id);
+    void deleteBorrower(Long id) throws DataNotFoundException;
 }
