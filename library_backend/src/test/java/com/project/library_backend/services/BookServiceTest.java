@@ -2,6 +2,7 @@ package com.project.library_backend.services;
 import com.project.library_backend.exceptions.DataNotFoundException;
 import com.project.library_backend.models.Book;
 import com.project.library_backend.repositories.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "/test.properties")
@@ -34,8 +36,15 @@ public class BookServiceTest {
     Path tempDir;
 
     @BeforeEach
+    @Transactional
     void setUp() {
-        System.setProperty("app.upload-dir", tempDir.toString() + "/");  // Cấu hình upload dir tạm thời
+        // Làm sạch database trước khi mỗi test
+        bookRepository.deleteAll();
+        bookRepository.flush();
+
+        // Cấu hình upload dir tạm thời
+        System.setProperty("app.upload-dir", tempDir.toString() + "/");
+        log.info("Temp upload dir set to: {}", tempDir.toString());
     }
 
     @Test
@@ -54,22 +63,30 @@ public class BookServiceTest {
         assertNotNull(savedBook.getId());
         assertNotNull(savedBook.getThumbnail());
         assertTrue(Files.exists(Path.of(savedBook.getThumbnail().substring(1))), "Thumbnail file should exist");
+        log.info("Saved book with thumbnail: {}", savedBook);
     }
 
     @Test
     void testGetAllBooks_success() throws IOException {
-        // Add 2 books
+        // Thêm 2 sách
         bookService.saveBookWithThumbnail(Book.builder()
-                        .title("Book 1").author("Author 1").publicationYear(2020L).genre("Fiction").build(),
-                null);
+                .title("Book 1")
+                .author("Author 1")
+                .publicationYear(2020L)
+                .genre("Fiction")
+                .build(), null);
 
         bookService.saveBookWithThumbnail(Book.builder()
-                        .title("Book 2").author("Author 2").publicationYear(2021L).genre("Drama").build(),
-                null);
+                .title("Book 2")
+                .author("Author 2")
+                .publicationYear(2021L)
+                .genre("Drama")
+                .build(), null);
 
         List<Book> books = bookService.getAllBooks();
 
-        assertEquals(2, books.size());
+        assertEquals(2, books.size(), "Expected 2 books, but found: " + books.size());
+        log.info("Retrieved books: {}", books);
     }
 
     @Test
@@ -85,6 +102,7 @@ public class BookServiceTest {
 
         assertEquals(book.getTitle(), found.getTitle());
         assertEquals(book.getAuthor(), found.getAuthor());
+        log.info("Found book: {}", found);
     }
 
     @Test
@@ -95,6 +113,7 @@ public class BookServiceTest {
         });
 
         assertEquals("Cannot find book with id: " + nonExistentId, exception.getMessage());
+        log.info("Caught expected exception: {}", exception.getMessage());
     }
 
     @Test
@@ -109,6 +128,7 @@ public class BookServiceTest {
         bookService.deleteBook(book.getId());
 
         assertFalse(bookRepository.existsById(book.getId()));
+        log.info("Deleted book with id: {}", book.getId());
     }
 
     @Test
@@ -119,6 +139,7 @@ public class BookServiceTest {
             bookService.deleteBook(nonExistentId);
         });
 
-        assertEquals("Cannot find borrower with id: " + nonExistentId, exception.getMessage());
+        assertEquals("Cannot find book with id: " + nonExistentId, exception.getMessage());
+        log.info("Caught expected exception: {}", exception.getMessage());
     }
 }

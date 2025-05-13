@@ -79,7 +79,7 @@ public class BookService implements IBookService{
     @Override
     public void deleteBook(Long id) throws DataNotFoundException {
         if (!bookRepository.existsById(id)){
-            throw new DataNotFoundException("Cannot find borrower with id: " + id);
+            throw new DataNotFoundException("Cannot find book with id: " + id);
         }
         Optional<Book> bookOpt = bookRepository.findById(id);
         if (bookOpt.isPresent()) {
