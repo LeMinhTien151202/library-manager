@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BorrowStatusDTO {
     @JsonProperty("book_id")
     private Long bookId;
