@@ -13,5 +13,5 @@ public interface IBookService {
     Book getBookById(Long id) throws Exception;
     Book saveBookWithThumbnail(Book book, MultipartFile thumbnailFile) throws IOException;
     Book updateBook(Long id, Book book) throws Exception;
-    void deleteBook(Long id);
+    void deleteBook(Long id) throws DataNotFoundException;
 }

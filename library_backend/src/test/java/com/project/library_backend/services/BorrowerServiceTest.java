@@ -173,7 +173,7 @@ public class BorrowerServiceTest {
 
         // THEN
         assertEquals(borrower.getId(), result.getId());
-        assertEquals("Tien Le Updated sai", result.getName());
+        assertEquals("Tien Le Updated", result.getName());
         assertEquals("tienle.updated@gmail.com", result.getEmail());
         assertEquals("0123456789", result.getPhone());
     }

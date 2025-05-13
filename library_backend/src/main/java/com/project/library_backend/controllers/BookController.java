@@ -1,5 +1,6 @@
 package com.project.library_backend.controllers;
 
+import com.project.library_backend.exceptions.DataNotFoundException;
 import com.project.library_backend.models.Book;
 import com.project.library_backend.responses.ResponseObject;
 import com.project.library_backend.services.IBookService;
@@ -115,7 +116,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> deleteBook(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteBook(@PathVariable Long id) throws Exception,DataNotFoundException {
         bookService.deleteBook(id);
         return ResponseEntity.ok(
                 ResponseObject.builder()
