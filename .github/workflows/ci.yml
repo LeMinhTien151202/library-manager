@@ -16,33 +16,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code từ repository
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      # Step 2: Cài đặt JDK 17 Amazon Corretto
-      - name: Set up JDK 17 Amazon Corretto
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'corretto'
-          cache: 'maven'
+    - name: Set up JDK 17 Amazon Corretto
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+        cache: 'maven'
 
-      # Step 3: Build và chạy test với Maven
-      - name: Build and Test
-        run: mvn clean test --file pom.xml
+    - name: Build and Test
+      working-directory: ./library_backend  # 👈 chỉ rõ thư mục chứa pom.xml
+      run: mvn clean test
 
-      # Step 4: Lưu kết quả test (artifacts)
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: target/surefire-reports/
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: library_backend/target/surefire-reports/  # 👈 đúng đường dẫn
 
-      # Step 5: Debug nếu test thất bại
-      - name: Debug Test Failure
-        if: failure()
-        run: |
-          echo "Test failed. Showing logs..."
-          cat target/surefire-reports/*.txt
+    - name: Debug Test Failure
+      if: failure()
+      run: |
+        echo "Test failed. Showing logs..."
+        cat library_backend/target/surefire-reports/*.txt
