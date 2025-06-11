@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiResponse } from 'src/app/responses/api.response';
 import { BookService } from 'src/app/services/book.service';
 
 @Component({
@@ -39,14 +40,14 @@ export class EditBookComponent {
   }
 
   loadBook(id: number): void {
-    this.bookService.getBookById(id).subscribe(book => {
+    this.bookService.getBookById(id).subscribe((apiResponse : ApiResponse) => {
       this.bookForm.patchValue({
-        title: book.title,
-        author: book.author,
-        publicationYear: book.publicationYear,
-        genre: book.genre
+        title: apiResponse.data.title,
+        author: apiResponse.data.author,
+        publicationYear: apiResponse.data.publicationYear,
+        genre: apiResponse.data.genre
       });
-      this.currentThumbnail = book.thumbnail;
+      this.currentThumbnail = apiResponse.data.thumbnail;
     });
   }
 

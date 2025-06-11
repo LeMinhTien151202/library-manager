@@ -1,9 +1,9 @@
 package com.project.library_backend.controllers;
 
 import com.project.library_backend.exceptions.DataNotFoundException;
-import com.project.library_backend.models.Borrower;
+import com.project.library_backend.models.User;
 import com.project.library_backend.responses.ResponseObject;
-import com.project.library_backend.services.IBorrowerService;
+import com.project.library_backend.services.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +17,15 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/borrowers")
+@RequestMapping("api/v1/users")
 @RequiredArgsConstructor
-public class BorrowerController {
+public class UserController {
 
-    private final IBorrowerService borrowerService;
+    private final IUserService userService;
 
-    @PostMapping("")
-    public ResponseEntity<ResponseObject> createBorrower(
-            @Valid @RequestBody Borrower borrower,
+    @PostMapping("/register")
+    public ResponseEntity<ResponseObject> createUser(
+            @Valid @RequestBody User user,
             BindingResult result
     ) throws DataNotFoundException,Exception {
         if(result.hasErrors()) {
@@ -39,41 +39,41 @@ public class BorrowerController {
                             .status(HttpStatus.BAD_REQUEST)
                             .build());
         }
-        log.info("controller: create borrower");
-        Borrower newBorrower = borrowerService.createBorrower(borrower);
+        log.info("controller: create user");
+        User newUser = userService.createUser(user);
         return ResponseEntity.ok(ResponseObject.builder()
-                .message("add borrower successfully")
+                .message("add user successfully")
                 .status(HttpStatus.OK)
-                .data(newBorrower).build());
+                .data(newUser).build());
     }
 
     //http://localhost:8088/api/v1/products/6
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBorrowerById(
-            @PathVariable("id") Long borrowerId
+    public ResponseEntity<?> getUserById(
+            @PathVariable("id") Long userId
     ) throws Exception {
-        Borrower existingBorrower = borrowerService.getBorrowerById(borrowerId);
+        User existingUser = userService.getUserById(userId);
         return ResponseEntity.ok(ResponseObject.builder()
-                .data(existingBorrower)
-                .message("Get borrower information successfully")
+                .data(existingUser)
+                .message("Get user information successfully")
                 .status(HttpStatus.OK)
                 .build());
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getBorrowerAll() {
-        List<Borrower> borrowers = borrowerService.getAllBorrowers();
+    public ResponseEntity<?> getUserAll() {
+        List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(ResponseObject.builder()
-                .message("Get list of borrower successfully")
+                .message("Get list of user successfully")
                 .status(HttpStatus.OK)
-                .data(borrowers)
+                .data(users)
                 .build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateBorrower(
+    public ResponseEntity<ResponseObject> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody Borrower borrower,
+            @Valid @RequestBody User user,
             BindingResult result
     ) throws Exception{
         if(result.hasErrors()) {
@@ -87,16 +87,16 @@ public class BorrowerController {
                             .status(HttpStatus.BAD_REQUEST)
                             .build());
         }
-        Borrower borrower1 = borrowerService.updateBorrower(id,borrower);
-        return ResponseEntity.ok(new ResponseObject("Update borrower successfully", HttpStatus.OK, borrower1));
+        User user1 = userService.updateUser(id,user);
+        return ResponseEntity.ok(new ResponseObject("Update user successfully", HttpStatus.OK, user1));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteBorrower(@PathVariable Long id) throws DataNotFoundException {
-        borrowerService.deleteBorrower(id);
+        userService.deleteUser(id);
         return ResponseEntity.ok(
                 ResponseObject.builder()
                         .status(HttpStatus.OK)
-                        .message("Delete subject with id: "+id+" successfully")
+                        .message("Delete user with id: "+id+" successfully")
                         .build());
     }
 

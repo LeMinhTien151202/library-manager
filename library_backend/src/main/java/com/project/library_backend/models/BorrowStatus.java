@@ -24,8 +24,8 @@ public class BorrowStatus {
     private Book book;
 
     @ManyToOne
-    @JoinColumn(name = "borrower_id")
-    private Borrower borrower;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "borrow_date", nullable = false)
     private LocalDate borrowDate;

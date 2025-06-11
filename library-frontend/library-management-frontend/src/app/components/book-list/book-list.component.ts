@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from 'src/app/models/book';
+import { ApiResponse } from 'src/app/responses/api.response';
 import { BookService } from 'src/app/services/book.service';
 
 @Component({
@@ -17,9 +18,9 @@ export class BookListComponent implements OnInit{
   }
 
   loadBooks(): void {
-    this.bookService.getBooks().subscribe((books) => {
+    this.bookService.getBooks().subscribe((apiResponse : ApiResponse) => {
       debugger
-      this.books = books;
+      this.books = apiResponse.data;
     });
   }
 

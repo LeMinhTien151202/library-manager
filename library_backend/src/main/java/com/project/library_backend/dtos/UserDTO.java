@@ -1,10 +1,7 @@
 package com.project.library_backend.dtos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data//toString
@@ -13,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BorrowerDTO {
+public class UserDTO {
 
     private String name;
 

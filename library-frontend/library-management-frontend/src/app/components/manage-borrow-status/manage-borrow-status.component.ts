@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from 'src/app/models/book';
 import { BorrowStatus } from 'src/app/models/borrow.status';
 import { Borrower } from 'src/app/models/borrower';
+import { ApiResponse } from 'src/app/responses/api.response';
 import { BookService } from 'src/app/services/book.service';
 
 @Component({
@@ -38,20 +39,20 @@ export class ManageBorrowStatusComponent {
   }
 
   loadBooks(): void {
-    this.bookService.getBooks().subscribe(books => {
-      this.books = books;
+    this.bookService.getBooks().subscribe((apiResponse : ApiResponse) => {
+      this.books = apiResponse.data;
     });
   }
 
   loadBorrowers(): void {
-    this.bookService.getBorrowers().subscribe(borrowers => {
-      this.borrowers = borrowers;
+    this.bookService.getBorrowers().subscribe((apiResponse : ApiResponse)=> {
+      this.borrowers = apiResponse.data;
     });
   }
 
   loadBorrowStatuses(): void {
-    this.bookService.getBorrowStatus().subscribe(statuses => {
-      this.borrowStatuses = statuses;
+    this.bookService.getBorrowStatus().subscribe((apiResponse : ApiResponse) => {
+      this.borrowStatuses = apiResponse.data;
     });
   }
 

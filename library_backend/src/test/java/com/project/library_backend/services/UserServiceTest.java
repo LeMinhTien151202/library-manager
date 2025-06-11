@@ -1,8 +1,8 @@
 package com.project.library_backend.services;
 
 import com.project.library_backend.exceptions.DataNotFoundException;
-import com.project.library_backend.models.Borrower;
-import com.project.library_backend.repositories.BorrowerRepository;
+import com.project.library_backend.models.User;
+import com.project.library_backend.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,16 +20,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "/test.properties")
-public class BorrowerServiceTest {
+public class UserServiceTest {
     @Autowired
-    private BorrowerService borrowerService;
+    private UserService borrowerService;
 
     @Autowired
-    private BorrowerRepository borrowerRepository;
+    private UserRepository borrowerRepository;
 
-    private Borrower borrower;
-    private Borrower borrower2;
-    private Borrower invalidBorrower;
+    private User borrower;
+    private User borrower2;
+    private User invalidBorrower;
 
     @BeforeEach
     @Transactional
@@ -39,19 +39,19 @@ public class BorrowerServiceTest {
         borrowerRepository.flush();
 
         // Initialize test data
-        borrower = Borrower.builder()
+        borrower = User.builder()
                 .name("Tien Le")
                 .email("tienle1@gmail.com")
                 .phone("0987654321")
                 .build();
 
-        borrower2 = Borrower.builder()
+        borrower2 = User.builder()
                 .name("Jane Doe")
                 .email("jane@gmail.com")
                 .phone("0987654322")
                 .build();
 
-        invalidBorrower = Borrower.builder()
+        invalidBorrower = User.builder()
                 .name("Tien Le")
                 .email("tienle1@gmail.com")
                 .phone("0987654321091") // Invalid phone
@@ -65,7 +65,7 @@ public class BorrowerServiceTest {
     @Test
     void getAllBorrowers_success() {
         // WHEN
-        List<Borrower> borrowers = borrowerService.getAllBorrowers();
+        List<User> borrowers = borrowerService.getAllUsers();
 
         // THEN
         assertEquals(2, borrowers.size());
@@ -84,7 +84,7 @@ public class BorrowerServiceTest {
         borrowerRepository.flush();
 
         // WHEN
-        List<Borrower> borrowers = borrowerService.getAllBorrowers();
+        List<User> borrowers = borrowerService.getAllUsers();
 
         // THEN
         assertTrue(borrowers.isEmpty());
@@ -93,7 +93,7 @@ public class BorrowerServiceTest {
     @Test
     void getBorrowerById_success() throws Exception {
         // WHEN
-        Borrower result = borrowerService.getBorrowerById(borrower.getId());
+        User result = borrowerService.getUserById(borrower.getId());
 
         // THEN
         assertNotNull(result);
@@ -110,21 +110,21 @@ public class BorrowerServiceTest {
 
         // WHEN, THEN
         DataNotFoundException exception = assertThrows(DataNotFoundException.class,
-                () -> borrowerService.getBorrowerById(nonExistentId));
+                () -> borrowerService.getUserById(nonExistentId));
         assertEquals("Cannot find borrower with id: " + nonExistentId, exception.getMessage());
     }
 
     @Test
     void createBorrower_success() {
         // GIVEN
-        Borrower newBorrower = Borrower.builder()
+        User newBorrower = User.builder()
                 .name("John Doe")
                 .email("john@gmail.com")
                 .phone("0123456789")
                 .build();
 
         // WHEN
-        Borrower result = borrowerService.createBorrower(newBorrower);
+        User result = borrowerService.createUser(newBorrower);
 
         // THEN
         assertNotNull(result.getId());
@@ -137,7 +137,7 @@ public class BorrowerServiceTest {
     @Test
     void createBorrower_phoneExists_fail() {
         // GIVEN
-        Borrower newBorrower = Borrower.builder()
+        User newBorrower = User.builder()
                 .name("John Doe")
                 .email("john@gmail.com")
                 .phone("0987654321") // Same phone as borrower
@@ -145,7 +145,7 @@ public class BorrowerServiceTest {
 
         // WHEN, THEN
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> borrowerService.createBorrower(newBorrower));
+                () -> borrowerService.createUser(newBorrower));
         assertEquals("phone existed.", exception.getMessage());
         assertEquals(2, borrowerRepository.count());
     }
@@ -154,7 +154,7 @@ public class BorrowerServiceTest {
     void createBorrower_phoneInvalid_fail() {
         // WHEN, THEN
         ConstraintViolationException exception = assertThrows(ConstraintViolationException.class,
-                () -> borrowerService.createBorrower(invalidBorrower));
+                () -> borrowerService.createUser(invalidBorrower));
         assertTrue(exception.getMessage().contains("Phone must be between 10 and 12 characters"));
         assertEquals(2, borrowerRepository.count());
     }
@@ -162,14 +162,14 @@ public class BorrowerServiceTest {
     @Test
     void updateBorrower_success() throws Exception {
         // GIVEN
-        Borrower updatedBorrower = Borrower.builder()
+        User updatedBorrower = User.builder()
                 .name("Tien Le Updated")
                 .email("tienle.updated@gmail.com")
                 .phone("0123456789")
                 .build();
 
         // WHEN
-        Borrower result = borrowerService.updateBorrower(borrower.getId(), updatedBorrower);
+        User result = borrowerService.updateUser(borrower.getId(), updatedBorrower);
 
         // THEN
         assertEquals(borrower.getId(), result.getId());
@@ -181,7 +181,7 @@ public class BorrowerServiceTest {
     @Test
     void updateBorrower_notFound() {
         // GIVEN
-        Borrower updatedBorrower = Borrower.builder()
+        User updatedBorrower = User.builder()
                 .name("Tien Le Updated")
                 .email("tienle.updated@gmail.com")
                 .phone("0123456789")
@@ -190,7 +190,7 @@ public class BorrowerServiceTest {
 
         // WHEN, THEN
         DataNotFoundException exception = assertThrows(DataNotFoundException.class,
-                () -> borrowerService.updateBorrower(nonExistentId, updatedBorrower));
+                () -> borrowerService.updateUser(nonExistentId, updatedBorrower));
         assertEquals("Cannot find borrower with id: " + nonExistentId, exception.getMessage());
     }
 
@@ -198,7 +198,7 @@ public class BorrowerServiceTest {
     void updateBorrower_phoneInvalid_fail() {
         // WHEN, THEN
         TransactionSystemException exception = assertThrows(TransactionSystemException.class,
-                () -> borrowerService.updateBorrower(borrower.getId(), invalidBorrower));
+                () -> borrowerService.updateUser(borrower.getId(), invalidBorrower));
         Throwable cause = exception.getCause();
         assertTrue(cause instanceof jakarta.persistence.RollbackException);
         assertTrue(cause.getCause() instanceof ConstraintViolationException);
@@ -208,7 +208,7 @@ public class BorrowerServiceTest {
     @Test
     void deleteBorrower_success() throws Exception{
         // WHEN
-        borrowerService.deleteBorrower(borrower.getId());
+        borrowerService.deleteUser(borrower.getId());
 
         // THEN
         assertEquals(1, borrowerRepository.count());
@@ -222,7 +222,7 @@ public class BorrowerServiceTest {
 
         // WHEN, THEN
         DataNotFoundException exception = assertThrows(DataNotFoundException.class,
-                () -> borrowerService.deleteBorrower(nonExistentId));
+                () -> borrowerService.deleteUser(nonExistentId));
         assertEquals("Cannot find borrower with id: " + nonExistentId, exception.getMessage());
         assertEquals(2, borrowerRepository.count());
     }

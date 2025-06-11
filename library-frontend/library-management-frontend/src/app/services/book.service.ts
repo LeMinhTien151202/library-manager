@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Book } from '../models/book';
 import { BorrowStatus } from '../models/borrow.status';
 import { Borrower } from '../models/borrower';
+import { ApiResponse } from '../responses/api.response';
 
 @Injectable({
   providedIn: 'root'
@@ -16,59 +17,59 @@ export class BookService {
   ) { }
 
 
-  getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(`${this.apiUrl}/books`);
+  getBooks(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/books`);
   }
 
-  getBookById(id: number): Observable<Book> {
-    return this.http.get<Book>(`${this.apiUrl}/books/${id}`);
+  getBookById(id: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/books/${id}`);
   }
 
-  deleteBook(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/books/${id}`);
+  deleteBook(id: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.apiUrl}/books/${id}`);
   }
 
-  createBook(bookData: FormData): Observable<Book> {
-    return this.http.post<Book>(`${this.apiUrl}/books`, bookData);
+  createBook(bookData: FormData): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/books`, bookData);
   }
 
-  updateBook(id: number, bookData: FormData): Observable<Book> {
-    return this.http.put<Book>(`${this.apiUrl}/books/${id}`, bookData);
+  updateBook(id: number, bookData: FormData): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/books/${id}`, bookData);
   }
 
-  getBorrowStatus(): Observable<BorrowStatus[]> {
-    return this.http.get<BorrowStatus[]>(`${this.apiUrl}/borrow_status`);
+  getBorrowStatus(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/borrow_status`);
   }
 
-  createBorrowStatus(borrowStatus: any): Observable<BorrowStatus> {
-    return this.http.post<BorrowStatus>(`${this.apiUrl}/borrow_status`, borrowStatus);
+  createBorrowStatus(borrowStatus: any): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/borrow_status`, borrowStatus);
   }
 
-  updateBorrowStatus(id: number, borrowStatus: any): Observable<BorrowStatus> {
-    return this.http.put<BorrowStatus>(`${this.apiUrl}/borrow_status/${id}`, borrowStatus);
+  updateBorrowStatus(id: number, borrowStatus: any): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/borrow_status/${id}`, borrowStatus);
   }
 
-  deleteBorrowStatus(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/borrow_status/${id}`);
+  deleteBorrowStatus(id: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.apiUrl}/borrow_status/${id}`);
   }
 
-  getBorrowers(): Observable<Borrower[]> {
-    return this.http.get<Borrower[]>(`${this.apiUrl}/borrowers`);
+  getBorrowers(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/borrowers`);
   }
 
-  getBorrowerById(id: number): Observable<Borrower> {
-    return this.http.get<Borrower>(`${this.apiUrl}/borrowers/${id}`);
+  getBorrowerById(id: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/borrowers/${id}`);
   }
 
-  createBorrower(borrower: any): Observable<Borrower> {
-    return this.http.post<Borrower>(`${this.apiUrl}/borrowers`, borrower);
+  createBorrower(borrower: any): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiUrl}/borrowers`, borrower);
   }
 
-  updateBorrower(id: number, borrower: any): Observable<Borrower> {
-    return this.http.put<Borrower>(`${this.apiUrl}/borrowers/${id}`, borrower);
+  updateBorrower(id: number, borrower: any): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/borrowers/${id}`, borrower);
   }
 
-  deleteBorrower(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/borrowers/${id}`);
+  deleteBorrower(id: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.apiUrl}/borrowers/${id}`);
   }
 }

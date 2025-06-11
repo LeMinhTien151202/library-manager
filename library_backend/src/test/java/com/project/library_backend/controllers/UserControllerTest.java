@@ -2,8 +2,8 @@ package com.project.library_backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.project.library_backend.models.Borrower;
-import com.project.library_backend.repositories.BorrowerRepository;
+import com.project.library_backend.models.User;
+import com.project.library_backend.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,17 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "/test.properties")
-public class BorrowerControllerTest {
+public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private BorrowerRepository borrowerRepository;
+    private UserRepository borrowerRepository;
 
-    private Borrower borrower;
-    private Borrower invalidBorrower;
-    private Borrower borrower2;
+    private User borrower;
+    private User invalidBorrower;
+    private User borrower2;
 
     @BeforeEach
     @Transactional
@@ -41,19 +41,19 @@ public class BorrowerControllerTest {
         borrowerRepository.flush();
 
         // Initialize test data without manual ID
-        borrower = Borrower.builder()
+        borrower = User.builder()
                 .name("Tien Le")
                 .email("tienle1@gmail.com")
                 .phone("0987654321")
                 .build();
 
-        invalidBorrower = Borrower.builder()
+        invalidBorrower = User.builder()
                 .name("Tien Le")
                 .email("tienle1@gmail.com")
                 .phone("0987654321091") // Invalid phone
                 .build();
 
-        borrower2 = Borrower.builder()
+        borrower2 = User.builder()
                 .name("Jane Doe")
                 .email("jane@gmail.com")
                 .phone("0987654322")
@@ -72,7 +72,7 @@ public class BorrowerControllerTest {
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        Borrower newBorrower = Borrower.builder()
+        User newBorrower = User.builder()
                 .name("John Doe")
                 .email("john@gmail.com")
                 .phone("0123456789")
@@ -172,7 +172,7 @@ public class BorrowerControllerTest {
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        Borrower updatedBorrower = Borrower.builder()
+        User updatedBorrower = User.builder()
                 .name("Tien Le Updated")
                 .email("tienle.updated@gmail.com")
                 .phone("0987654321")
@@ -220,7 +220,7 @@ public class BorrowerControllerTest {
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        Borrower updatedBorrower = Borrower.builder()
+        User updatedBorrower = User.builder()
                 .name("Tien Le Updated")
                 .email("tienle.updated@gmail.com")
                 .phone("0987654321")

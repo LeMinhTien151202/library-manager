@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Borrower } from 'src/app/models/borrower';
+import { ApiResponse } from 'src/app/responses/api.response';
 import { BookService } from 'src/app/services/book.service';
 
 @Component({
@@ -30,8 +31,8 @@ export class ManageBorrowerComponent {
   }
 
   loadBorrowers(): void {
-    this.bookService.getBorrowers().subscribe(borrowers => {
-      this.borrowers = borrowers;
+    this.bookService.getBorrowers().subscribe((apiResponse : ApiResponse) => {
+      this.borrowers = apiResponse.data;
     });
   }
 

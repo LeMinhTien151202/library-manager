@@ -2,7 +2,6 @@ package com.project.library_backend.controllers;
 
 import com.project.library_backend.dtos.BorrowStatusDTO;
 import com.project.library_backend.models.BorrowStatus;
-import com.project.library_backend.models.Borrower;
 import com.project.library_backend.responses.ResponseObject;
 import com.project.library_backend.services.IBorrowStatusService;
 import jakarta.validation.Valid;

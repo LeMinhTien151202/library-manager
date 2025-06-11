@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BorrowStatus } from 'src/app/models/borrow.status';
+import { ApiResponse } from 'src/app/responses/api.response';
 import { BookService } from 'src/app/services/book.service';
 
 @Component({
@@ -17,8 +18,8 @@ export class BorrowStatusComponent implements OnInit{
   }
 
   loadBorrowStatuses(): void {
-    this.bookService.getBorrowStatus().subscribe((statuses) => {
-      this.borrowStatuses = statuses;
+    this.bookService.getBorrowStatus().subscribe((apiResponse : ApiResponse) => {
+      this.borrowStatuses = apiResponse.data;
     });
   }
 

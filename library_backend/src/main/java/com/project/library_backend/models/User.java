@@ -1,27 +1,33 @@
 package com.project.library_backend.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "borrowers")
+@Table(name = "users")
 @Data//toString
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Borrower {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column(nullable = false)
     private String email;

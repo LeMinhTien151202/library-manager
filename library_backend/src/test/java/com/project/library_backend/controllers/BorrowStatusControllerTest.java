@@ -5,10 +5,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.library_backend.dtos.BorrowStatusDTO;
 import com.project.library_backend.models.Book;
 import com.project.library_backend.models.BorrowStatus;
-import com.project.library_backend.models.Borrower;
+import com.project.library_backend.models.User;
 import com.project.library_backend.repositories.BookRepository;
 import com.project.library_backend.repositories.BorrowStatusRepository;
-import com.project.library_backend.repositories.BorrowerRepository;
+import com.project.library_backend.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,10 +42,10 @@ public class BorrowStatusControllerTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private BorrowerRepository borrowerRepository;
+    private UserRepository borrowerRepository;
 
     private Book book;
-    private Borrower borrower;
+    private User borrower;
     private BorrowStatus borrowStatus;
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -61,7 +61,7 @@ public class BorrowStatusControllerTest {
                 .author("Author")
                 .build());
 
-        borrower = borrowerRepository.save(Borrower.builder()
+        borrower = borrowerRepository.save(User.builder()
                 .name("Test Borrower")
                 .email("test@library.com")
                 .phone("0123456789")

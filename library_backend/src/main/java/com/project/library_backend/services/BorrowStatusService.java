@@ -4,10 +4,10 @@ import com.project.library_backend.dtos.BorrowStatusDTO;
 import com.project.library_backend.exceptions.DataNotFoundException;
 import com.project.library_backend.models.Book;
 import com.project.library_backend.models.BorrowStatus;
-import com.project.library_backend.models.Borrower;
+import com.project.library_backend.models.User;
 import com.project.library_backend.repositories.BookRepository;
 import com.project.library_backend.repositories.BorrowStatusRepository;
-import com.project.library_backend.repositories.BorrowerRepository;
+import com.project.library_backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class BorrowStatusService implements IBorrowStatusService{
 
     private final BorrowStatusRepository borrowStatusRepository;
     private final BookRepository bookRepository;
-    private final BorrowerRepository borrowerRepository;
+    private final UserRepository borrowerRepository;
 
     @Override
     public List<BorrowStatus> getAllBorrowStatus() {
@@ -40,14 +40,14 @@ public class BorrowStatusService implements IBorrowStatusService{
                 .orElseThrow(() ->
                         new DataNotFoundException(
                                 "Cannot find book with id: "+borrowStatusDTO.getBookId()));
-        Borrower existingBorrower = borrowerRepository
+        User existingBorrower = borrowerRepository
                 .findById(borrowStatusDTO.getBorrowerId())
                 .orElseThrow(() ->
                         new DataNotFoundException(
                                 "Cannot find borrower with id: "+borrowStatusDTO.getBorrowerId()));
         BorrowStatus newBorrowStatus = BorrowStatus.builder()
                 .status(borrowStatusDTO.getStatus())
-                .borrower(existingBorrower)
+                .user(existingBorrower)
                 .book(existingBook)
                 .borrowDate(borrowStatusDTO.getBorrowDate())
                 .returnDate(borrowStatusDTO.getReturnDate()).build();
@@ -66,7 +66,7 @@ public class BorrowStatusService implements IBorrowStatusService{
                 .orElseThrow(() ->
                         new DataNotFoundException(
                                 "Cannot find book with id: "+borrowStatusDTO.getBookId()));
-        Borrower existingBorrower = borrowerRepository
+        User existingBorrower = borrowerRepository
                 .findById(borrowStatusDTO.getBorrowerId())
                 .orElseThrow(() ->
                         new DataNotFoundException(
@@ -74,7 +74,7 @@ public class BorrowStatusService implements IBorrowStatusService{
         borrowStatus.setStatus(borrowStatusDTO.getStatus());
         borrowStatus.setBorrowDate(borrowStatusDTO.getBorrowDate());
         borrowStatus.setReturnDate(borrowStatusDTO.getReturnDate());
-        borrowStatus.setBorrower(existingBorrower);
+        borrowStatus.setUser(existingBorrower);
         borrowStatus.setBook(existingBook);
         return borrowStatusRepository.save(borrowStatus);
     }

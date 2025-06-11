@@ -4,10 +4,10 @@ import com.project.library_backend.dtos.BorrowStatusDTO;
 import com.project.library_backend.exceptions.DataNotFoundException;
 import com.project.library_backend.models.Book;
 import com.project.library_backend.models.BorrowStatus;
-import com.project.library_backend.models.Borrower;
+import com.project.library_backend.models.User;
 import com.project.library_backend.repositories.BookRepository;
 import com.project.library_backend.repositories.BorrowStatusRepository;
-import com.project.library_backend.repositories.BorrowerRepository;
+import com.project.library_backend.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,13 +35,13 @@ public class BorrowStatusServiceTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private BorrowerRepository borrowerRepository;
+    private UserRepository borrowerRepository;
 
     @Autowired
     private BorrowStatusRepository borrowStatusRepository;
 
     private Book savedBook;
-    private Borrower savedBorrower;
+    private User savedBorrower;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +52,7 @@ public class BorrowStatusServiceTest {
                 .genre("Novel")
                 .build());
 
-        savedBorrower = borrowerRepository.save(Borrower.builder()
+        savedBorrower = borrowerRepository.save(User.builder()
                 .name("Test Borrower")
                 .email("test@example.com")
                 .phone("0123456789")
